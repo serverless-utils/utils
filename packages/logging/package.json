@@ -1,0 +1,39 @@
+{
+  "name": "@serverless-utils/logging",
+  "version": "0.1.0",
+  "description": "Logging utilities for the Serverless framework.",
+  "source": "src/index.js",
+  "main": "dist/logging.js",
+  "module": "dist/logging.esm.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serverless-utils/utils.git",
+    "directory": "packages/logging"
+  },
+  "homepage": "https://github.com/serverless-utils/utils/tree/master/packages/logging#readme",
+  "scripts": {
+    "prepare": "microbundle --no-compress -o dist",
+    "watch": "microbundle watch --no-compress -o dist",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "files": [
+    "esm/*",
+    "umd/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1"
+  },
+  "dependencies": {
+    "@utilz/deepmerge": "^0.1.15",
+    "@utilz/types": "^0.1.13",
+    "chalk": "^4.1.0"
+  }
+}

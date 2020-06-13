@@ -1,0 +1,17 @@
+{
+  "name": "example-logging",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "serverless": "serverless",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@serverless-utils/logging": "^0.1.0",
+    "serverless": "1.72.0"
+  }
+}
