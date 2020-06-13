@@ -1,0 +1,25 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "commit": "./node_modules/cz-customizable/standalone.js",
+    "test": "lerna run test",
+    "clean": "lerna clean",
+    "bootstrap": "lerna bootstrap",
+    "prepare": "lerna run prepare",
+    "release": "lerna publish",
+    "release:canary": "lerna publish --canary",
+    "release:next": "lerna publish --dist-tag=next --bump=prerelease",
+    "diff": "lerna diff",
+    "changed": "lerna changed"
+  },
+  "devDependencies": {
+    "cz-customizable": "^6.2.0",
+    "lerna": "^3.22.1",
+    "microbundle": "^0.12.0"
+  }
+}

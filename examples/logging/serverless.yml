@@ -1,0 +1,10 @@
+frameworkVersion: '=1.72.0'
+
+service: test
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+plugins:
+  - test
