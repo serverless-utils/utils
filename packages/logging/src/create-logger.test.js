@@ -46,7 +46,7 @@ describe('createLogger', () => {
     });
   });
 
-  it('debug should log expected message', () => {
+  it('debug should not log message with no SLS_DEBUG', () => {
     const logger = createLogger({
       pluginName: 'plugin',
       serverless: createServerless(),
@@ -54,6 +54,22 @@ describe('createLogger', () => {
 
     global.console.log = jest.fn();
     logger.debug('message');
+    expect(global.console.log).not.toHaveBeenCalledWith(
+      'plugin: DEBUG: message'
+    );
+  });
+
+  it('debug should log expected message with SLS_DEBUG', () => {
+    const logger = createLogger({
+      pluginName: 'plugin',
+      serverless: createServerless(),
+    });
+
+    process.env.SLS_DEBUG = '*';
+
+    global.console.log = jest.fn();
+    logger.debug('message');
+
     expect(global.console.log).toHaveBeenCalledWith('plugin: DEBUG: message');
   });
 

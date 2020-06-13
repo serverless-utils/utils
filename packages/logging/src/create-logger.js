@@ -59,6 +59,10 @@ export const createLogger = (options = {}) => {
   const baseLogger = createLoggerBase({
     level: LogLevel.DEBUG,
     log: ({ level, message, params, error }) => {
+      if (level === LogLevel.DEBUG && !process.env.SLS_DEBUG) {
+        return;
+      }
+
       serverless.cli.log(format(level, message, params, error));
     },
   });
