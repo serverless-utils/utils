@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { isNil, isString, isFunction } from '@utilz/types';
 import { LogLevel, createLogger as createLoggerBase } from './logger';
 
@@ -63,7 +64,22 @@ export const createLogger = (options = {}) => {
         return;
       }
 
-      serverless.cli.log(format(level, message, params, error));
+      const msg = format(level, message, params, error);
+
+      switch (level) {
+        case LogLevel.DEBUG:
+          serverless.cli.log(chalk.hex('#636363')(msg));
+          break;
+        case LogLevel.WARN:
+          serverless.cli.log(chalk.hex('#fff200')(msg));
+          break;
+        case LogLevel.ERROR:
+          serverless.cli.log(chalk.red(msg));
+          break;
+        default:
+          serverless.cli.log(msg);
+          break;
+      }
     },
   });
 

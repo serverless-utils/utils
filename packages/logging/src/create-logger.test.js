@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { createLogger } from './create-logger';
 
 class ServerlessError extends Error {
@@ -70,7 +71,9 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.debug('message');
 
-    expect(global.console.log).toHaveBeenCalledWith('plugin: DEBUG: message');
+    expect(global.console.log).toHaveBeenCalledWith(
+      chalk.hex('#636363')('plugin: DEBUG: message')
+    );
   });
 
   it('info should log expected message', () => {
@@ -92,7 +95,9 @@ describe('createLogger', () => {
 
     global.console.log = jest.fn();
     logger.warn('message');
-    expect(global.console.log).toHaveBeenCalledWith('plugin: WARN: message');
+    expect(global.console.log).toHaveBeenCalledWith(
+      chalk.hex('#fff200')('plugin: WARN: message')
+    );
   });
 
   it('warn should log expected exception', () => {
@@ -104,7 +109,7 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.warn('message', new Error('exception'));
     expect(global.console.log).toHaveBeenCalledWith(
-      'plugin: WARN: message Error: exception'
+      chalk.hex('#fff200')('plugin: WARN: message Error: exception')
     );
   });
 
@@ -116,7 +121,9 @@ describe('createLogger', () => {
 
     global.console.log = jest.fn();
     logger.error('message');
-    expect(global.console.log).toHaveBeenCalledWith('plugin: ERROR: message');
+    expect(global.console.log).toHaveBeenCalledWith(
+      chalk.red('plugin: ERROR: message')
+    );
   });
 
   it('error should log expected exception', () => {
@@ -128,7 +135,7 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.error('message', new Error('exception'));
     expect(global.console.log).toHaveBeenCalledWith(
-      'plugin: ERROR: message Error: exception'
+      chalk.red('plugin: ERROR: message Error: exception')
     );
   });
 
