@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import { createLogger } from './create-logger';
+import { createLogger, defaultColorMap, defaultFormat } from './create-logger';
+import { LogLevel } from './logger';
 
 class ServerlessError extends Error {
   constructor(message) {
@@ -7,11 +8,13 @@ class ServerlessError extends Error {
   }
 }
 
-const createServerless = () => ({
+const createServerless = (log) => ({
   cli: {
-    log: (message) => {
-      console.log(message);
-    },
+    log:
+      log ||
+      ((message) => {
+        console.log(message);
+      }),
   },
   classes: {
     Error: ServerlessError,
@@ -26,7 +29,9 @@ describe('createLogger', () => {
   });
 
   it('throws given no plugin name', () => {
-    expect(() => createLogger()).toThrow('No pluginName specified.');
+    expect(() => createLogger({ serverless: createServerless() })).toThrow(
+      'No pluginName specified.'
+    );
   });
 
   it('throws given empty plugin name', () => {
@@ -72,7 +77,7 @@ describe('createLogger', () => {
     logger.debug('message');
 
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.hex('#636363')('plugin: DEBUG: message')
+      chalk.hex(defaultColorMap[LogLevel.DEBUG])('plugin: DEBUG: message')
     );
   });
 
@@ -96,7 +101,7 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.warn('message');
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.hex('#fff200')('plugin: WARN: message')
+      chalk.hex(defaultColorMap[LogLevel.WARN])('plugin: WARN: message')
     );
   });
 
@@ -109,7 +114,9 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.warn('message', new Error('exception'));
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.hex('#fff200')('plugin: WARN: message Error: exception')
+      chalk.hex(defaultColorMap[LogLevel.WARN])(
+        'plugin: WARN: message Error: exception'
+      )
     );
   });
 
@@ -122,7 +129,7 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.error('message');
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.red('plugin: ERROR: message')
+      chalk.hex(defaultColorMap[LogLevel.ERROR])('plugin: ERROR: message')
     );
   });
 
@@ -135,7 +142,9 @@ describe('createLogger', () => {
     global.console.log = jest.fn();
     logger.error('message', new Error('exception'));
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.red('plugin: ERROR: message Error: exception')
+      chalk.hex(defaultColorMap[LogLevel.ERROR])(
+        'plugin: ERROR: message Error: exception'
+      )
     );
   });
 
@@ -146,5 +155,32 @@ describe('createLogger', () => {
     });
 
     expect(() => logger.throw('message')).toThrow('plugin: ERROR: message');
+  });
+
+  it('should allow format to be overridden', () => {
+    const logger = createLogger({
+      pluginName: 'plugin',
+      serverless: createServerless(),
+      format: ({ pluginName, message }) =>
+        `overridden: ${pluginName}: ${message}`,
+    });
+
+    expect(() => logger.throw('message')).toThrow(
+      'overridden: plugin: message'
+    );
+  });
+
+  it('should allow log to be overridden', () => {
+    const logger = createLogger({
+      pluginName: 'plugin',
+      serverless: createServerless(() => {}),
+      log: ({ message }) => console.log(`custom: ${message}`),
+    });
+
+    global.console.log = jest.fn();
+
+    logger.info('message');
+
+    expect(global.console.log).toHaveBeenCalledWith('custom: message');
   });
 });
