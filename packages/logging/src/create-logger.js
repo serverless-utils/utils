@@ -1,8 +1,7 @@
 import chalk from 'chalk';
-import { isNil, isString, isFunction } from '@utilz/types';
+import { isNil, isString, isFunction, isObject } from '@utilz/types';
 import { deepmerge } from '@utilz/deepmerge';
 import { LogLevel, createLogger as createLoggerBase } from './logger';
-import { isObject } from 'util';
 
 const ensureValidPluginName = (pluginName) => {
   if (isNil(pluginName)) {
