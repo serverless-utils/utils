@@ -6,15 +6,11 @@ import { isObject } from 'util';
 
 const ensureValidPluginName = (pluginName) => {
   if (isNil(pluginName)) {
-    throw new Error('No pluginName specified.');
+    return;
   }
 
   if (!isString(pluginName)) {
-    throw new Error('pluginName expected to be string.');
-  }
-
-  if (pluginName === '') {
-    throw new Error('No pluginName specified.');
+    throw new Error('pluginName expected to be a string.');
   }
 };
 
@@ -67,22 +63,19 @@ export const defaultColorMap = {
 };
 
 export const defaultLog = (options = {}) => ({
+  pluginName,
+  serverless,
   level,
   message,
   params,
   error,
 }) => {
   const defaultOptions = {
-    pluginName: undefined,
-    serverless: undefined,
     format: defaultFormat,
     colors: defaultColorMap,
   };
 
-  const { pluginName, serverless, format, colors } = deepmerge(
-    defaultOptions,
-    options
-  );
+  const { format, colors } = deepmerge(defaultOptions, options);
 
   ensureValidPluginName(pluginName);
   ensureValidServerless(serverless);
@@ -114,10 +107,7 @@ export const createLogger = (options = {}) => {
     pluginName: undefined,
     serverless: undefined,
     format: defaultFormat,
-    log: defaultLog({
-      pluginName: options.pluginName,
-      serverless: options.serverless,
-    }),
+    log: defaultLog(),
   };
 
   const { pluginName, serverless, format, log } = Object.assign(
@@ -131,7 +121,8 @@ export const createLogger = (options = {}) => {
 
   const baseLogger = createLoggerBase({
     level: LogLevel.DEBUG,
-    log,
+    log: ({ level, message, params, error }) =>
+      log({ pluginName, serverless, level, message, params, error }),
   });
 
   return {

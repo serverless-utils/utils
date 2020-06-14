@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { createLogger, defaultColorMap, defaultFormat } from './create-logger';
+import { createLogger, defaultColorMap, defaultLog } from './create-logger';
 import { LogLevel } from './logger';
 
 class ServerlessError extends Error {
@@ -28,16 +28,10 @@ describe('createLogger', () => {
     );
   });
 
-  it('throws given no plugin name', () => {
-    expect(() => createLogger({ serverless: createServerless() })).toThrow(
-      'No pluginName specified.'
-    );
-  });
-
-  it('throws given empty plugin name', () => {
+  it('throws given non string plugin name', () => {
     expect(() =>
-      createLogger({ pluginName: '', serverless: createServerless() })
-    ).toThrow('No pluginName specified.');
+      createLogger({ pluginName: false, serverless: createServerless() })
+    ).toThrow('pluginName expected to be a string.');
   });
 
   it('return expected logger object', () => {
@@ -174,13 +168,46 @@ describe('createLogger', () => {
     const logger = createLogger({
       pluginName: 'plugin',
       serverless: createServerless(() => {}),
-      log: ({ message }) => console.log(`custom: ${message}`),
+      log: ({ pluginName, message }) =>
+        console.log(`${pluginName}: custom: ${message}`),
     });
 
     global.console.log = jest.fn();
 
     logger.info('message');
 
-    expect(global.console.log).toHaveBeenCalledWith('custom: message');
+    expect(global.console.log).toHaveBeenCalledWith('plugin: custom: message');
+  });
+
+  it('should allow colors to be overridden', () => {
+    const logger = createLogger({
+      pluginName: 'plugin',
+      serverless: createServerless(),
+      log: defaultLog({
+        colors: {
+          [LogLevel.INFO]: '#c0c',
+        },
+      }),
+    });
+
+    global.console.log = jest.fn();
+
+    logger.info('message');
+
+    expect(global.console.log).toHaveBeenCalledWith(
+      chalk.hex('#c0c')('plugin: INFO: message')
+    );
+  });
+
+  it('should not log plugin name if not provided', () => {
+    const logger = createLogger({
+      serverless: createServerless(),
+    });
+
+    global.console.log = jest.fn();
+
+    logger.info('message');
+
+    expect(global.console.log).toHaveBeenCalledWith('INFO: message');
   });
 });
