@@ -2,17 +2,14 @@ import chalk from 'chalk';
 import { createLogger, defaultColorMap, defaultLog } from './create-logger';
 import { LogLevel } from './logger';
 
-class ServerlessError extends Error {
-  constructor(message) {
-    super(message);
-  }
-}
+class ServerlessError extends Error {}
 
 const createServerless = (log) => ({
   cli: {
     log:
       log ||
       ((message) => {
+        // eslint-disable-next-line no-console
         console.log(message);
       }),
   },
@@ -169,6 +166,7 @@ describe('createLogger', () => {
       pluginName: 'plugin',
       serverless: createServerless(() => {}),
       log: ({ pluginName, message }) =>
+        // eslint-disable-next-line no-console
         console.log(`${pluginName}: custom: ${message}`),
     });
 

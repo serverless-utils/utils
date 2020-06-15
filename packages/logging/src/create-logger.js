@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import util from 'util';
 import { isNil, isString, isFunction, isObject } from '@utilz/types';
 import { deepmerge } from '@utilz/deepmerge';
 import { LogLevel, createLogger as createLoggerBase } from './logger';
@@ -32,7 +33,7 @@ const ensureValidServerless = (serverless) => {
 
   if (
     isNil(serverless.classes.Error) ||
-    !serverless.classes.Error instanceof Error
+    !(serverless.classes.Error.prototype instanceof Error)
   ) {
     throw new Error('No Error property on the serverless classes property.');
   }
@@ -93,7 +94,7 @@ export const defaultLog = (options = {}) => ({
 
   const msg = format({ pluginName, level, message, params, error });
 
-  if (colors.hasOwnProperty(level)) {
+  if (Object.prototype.hasOwnProperty.call(colors, level)) {
     serverless.cli.log(chalk.hex(colors[level])(msg));
     return;
   }
@@ -109,11 +110,10 @@ export const createLogger = (options = {}) => {
     log: defaultLog(),
   };
 
-  const { pluginName, serverless, format, log } = Object.assign(
-    {},
-    defaultOptions,
-    options
-  );
+  const { pluginName, serverless, format, log } = {
+    ...defaultOptions,
+    ...options,
+  };
 
   ensureValidPluginName(pluginName);
   ensureValidServerless(serverless);
