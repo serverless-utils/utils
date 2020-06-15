@@ -1,12 +1,6 @@
 import { deepmerge } from '@utilz/deepmerge';
 import { defaultLog } from './default-log';
-
-export const LogLevel = {
-  DEBUG: 'DEBUG',
-  INFO: 'INFO',
-  WARN: 'WARN',
-  ERROR: 'ERROR',
-};
+import { LogLevel } from './log-level';
 
 const logLevels = {
   [LogLevel.DEBUG]: 20,

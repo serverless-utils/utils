@@ -1,6 +1,7 @@
 import chalk from 'chalk';
-import { createLogger, defaultColorMap, defaultLog } from './create-logger';
-import { LogLevel } from './logger';
+import { createLogger } from './create-logger';
+import { defaultColorMap, defaultLog } from './create-console-logger';
+import { LogLevel } from './log-level';
 
 class ServerlessError extends Error {}
 
@@ -152,8 +153,7 @@ describe('createLogger', () => {
     const logger = createLogger({
       pluginName: 'plugin',
       serverless: createServerless(),
-      format: ({ pluginName, message }) =>
-        `overridden: ${pluginName}: ${message}`,
+      format: ({ message }) => `overridden: plugin: ${message}`,
     });
 
     expect(() => logger.throw('message')).toThrow(
@@ -165,9 +165,9 @@ describe('createLogger', () => {
     const logger = createLogger({
       pluginName: 'plugin',
       serverless: createServerless(() => {}),
-      log: ({ pluginName, message }) =>
+      log: ({ message }) =>
         // eslint-disable-next-line no-console
-        console.log(`${pluginName}: custom: ${message}`),
+        console.log(`plugin: custom: ${message}`),
     });
 
     global.console.log = jest.fn();
@@ -182,6 +182,8 @@ describe('createLogger', () => {
       pluginName: 'plugin',
       serverless: createServerless(),
       log: defaultLog({
+        // eslint-disable-next-line no-console
+        log: (message) => console.log(message),
         colors: {
           [LogLevel.INFO]: '#c0c',
         },
@@ -193,7 +195,7 @@ describe('createLogger', () => {
     logger.info('message');
 
     expect(global.console.log).toHaveBeenCalledWith(
-      chalk.hex('#c0c')('plugin: INFO: message')
+      chalk.hex('#c0c')('INFO: message')
     );
   });
 
