@@ -63,8 +63,8 @@ export const createLogger = (options = {}) => {
         if (logDisabled) {
           return;
         }
-        console.log(message);
-        //options.serverless.cli.log(message);
+
+        options.serverless.cli.log(message);
       },
       format,
     })(props);
