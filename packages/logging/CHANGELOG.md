@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.4](https://github.com/serverless-utils/utils/compare/@serverless-utils/logging@0.1.3...@serverless-utils/logging@0.1.4) (2020-06-16)
+
+
+### Features
+
+* use utilz logger ([#3](https://github.com/serverless-utils/utils/issues/3)) ([8a890bc](https://github.com/serverless-utils/utils/commit/8a890bcf81d4bffbe1f2db8c2911b19fc0ebd6ca))
+
+
+
+
+
 ## [0.1.3](https://github.com/serverless-utils/utils/compare/@serverless-utils/logging@0.1.2...@serverless-utils/logging@0.1.3) (2020-06-14)
 
 
