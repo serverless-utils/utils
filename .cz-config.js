@@ -27,4 +27,4 @@ module.exports = {
   ],
   scopes: ['all', 'docs', 'build', 'merge', 'deepmerge', 'types', 'dummy'], // TODO: generate
   allowCustomScopes: false,
-}
+};

@@ -15,11 +15,22 @@
     "release:canary": "lerna publish --canary",
     "release:next": "lerna publish --dist-tag=next --bump=prerelease",
     "diff": "lerna diff",
-    "changed": "lerna changed"
+    "changed": "lerna changed",
+    "prettier": "prettier --check '**/*.{js,json,yml,md,css}'",
+    "eslint": "eslint .",
+    "lint": "yarn run prettier && yarn run eslint"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "cz-customizable": "^6.2.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-prettier": "^3.1.4",
     "lerna": "^3.22.1",
-    "microbundle": "^0.12.0"
+    "microbundle": "^0.12.0",
+    "prettier": "^2.0.5"
   }
 }

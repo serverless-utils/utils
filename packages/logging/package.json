@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@utilz/deepmerge": "^0.1.15",
+    "@utilz/logger": "^0.1.2",
     "@utilz/types": "^0.1.13",
     "chalk": "^4.1.0"
   }
